@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style_index.css">
+    <title>Frontend Mentor | Age calculator app</title>    
+  
+</head>
+<body>
+    <div class="meio">
+        <div class="top">
+            <table class="top">
+                <tr class="format_labels_date">
+                    <td id="dayLabel" class="format_labels_date">DAY</td>
+                    <td id="monthLabel" class="format_labels_date">MONTH</td>
+                    <td id="yearLabel" class="format_labels_date">YEAR</td>
+                </tr>
+                <tr class="format_inputs" >
+                    <td><input class="format_inputs" type="number" id="day" placeholder="DD" oninput="validateDay()" ></td>
+                    <td><input class="format_inputs" type="number" id="month" placeholder="MM" oninput="validateMonth()" ></td>
+                    <td><input class="format_inputs" type="number" id="year" placeholder="YYYY" oninput="validateYear()" ></td>
+                </tr>
+            </table>
+        </div>
+        <hr class="dropdown-divider">
+        <div id="result">
+              <div class="container">
+                <div id="year_result" class="resultado-left">--</div>
+                <div class="resultado-rigth">years</div>
+            </div>
+            <div class="container">
+                <div id="month_result" class="resultado-left">--</div>
+                <div class="resultado-rigth">months</div>
+            </div>
+            <div class="container">
+                <div id="day_result" class="resultado-left">--</div>
+                <div class="resultado-rigth">days</div>
+            </div>
+        </div>
+       
+    </div>
+
+    <script>
+        function validateDay() {
+          
+            var dayInput = document.getElementById('day');
+            var day = dayInput.value;
+
+            if (!/^\d{1,2}$/.test(day) || parseInt(day) < 1 || parseInt(day) > 31) {
+              dayInput.classList.remove("format_inputs");  
+              dayInput.classList.add("error-input");
+                document.getElementById('dayLabel').classList.remove("format_labels_date");
+                document.getElementById('dayLabel').classList.add("error-label");
+            } else {
+                dayInput.classList.remove("error-input");
+                dayInput.classList.add("format_inputs");  
+                document.getElementById('dayLabel').classList.remove("error-label");
+                checkFields(); // Chama a função para verificar se todos os campos estão preenchidos
+            }
+        }
+
+        function validateMonth() {
+            var monthInput = document.getElementById('month');
+            var month = monthInput.value;
+
+            if (!/^\d{1,2}$/.test(month) || parseInt(month) < 1 || parseInt(month) > 12) {
+              monthInput.classList.remove("format_inputs");
+                monthInput.classList.add("error-input");
+                 document.getElementById('monthLabel').classList.remove("format_labels_date");
+                document.getElementById('monthLabel').classList.add("error-label");
+               
+            } else {
+                monthInput.classList.remove("error-input");
+                monthInput.classList.add("format_inputs");
+                document.getElementById('monthLabel').classList.remove("error-label");
+                checkFields(); // Chama a função para verificar se todos os campos estão preenchidos
+            }
+        }
+
+        function validateYear() {
+            var yearInput = document.getElementById('year');
+            var year = yearInput.value;
+
+            if (!/^\d{4}$/.test(year) || parseInt(year) < 1900 || parseInt(year) > 2100) {
+                yearInput.classList.remove("format_inputs");
+                yearInput.classList.add("error-input");
+                document.getElementById('monthLabel').classList.remove("format_labels_date");
+                document.getElementById('yearLabel').classList.add("error-label");
+            } else {
+                yearInput.classList.remove("error-input");
+                yearInput.classList.add("format_inputs");
+                document.getElementById('yearLabel').classList.remove("error-label");
+                checkFields(); // Chama a função para verificar se todos os campos estão preenchidos
+            }
+        }
+
+        
+   
+
+          function checkFields() {
+              var dayInput = document.getElementById('day');
+              var monthInput = document.getElementById('month');
+              var yearInput = document.getElementById('year');
+
+              if (!dayInput.classList.contains("error-input") && !monthInput.classList.contains("error-input") && 
+                !yearInput.classList.contains("error-input") && dayInput.value !== "" 
+                && monthInput.value !== "" && yearInput.value !== "") {
+                    calculateAge(); // Chama a função de cálculo se todos os campos estiverem preenchidos corretamente
+              }
+
+          }
+
+        function calculateAge() {
+            var currentDate = new Date();
+
+            var dayInput = document.getElementById('day');
+            var monthInput = document.getElementById('month');
+            var yearInput = document.getElementById('year');
+
+            if (dayInput.classList.contains("error-input") || monthInput.classList.contains("error-input") || yearInput.classList.contains("error-input")) {
+                return; // Não calcular se houver erros de validação
+            }
+
+            var day = dayInput.value;
+            var month = monthInput.value;
+            var year = yearInput.value;
+
+            // Verifica se o ano e o mês estão preenchidos antes de calcular
+            if (year === "" || month === "") {
+                return; // Não calcular se ano ou mês não estiverem preenchidos
+            }
+
+            var birthDate = new Date(year, month - 1, day);
+
+            var ageInMilliseconds = currentDate - birthDate;
+
+            var ageDate = new Date(ageInMilliseconds);
+            var years = Math.floor(ageDate / 31536000000); // número aproximado de milissegundos em um ano
+            var months = ageDate.getUTCMonth();
+            var days = ageDate.getUTCDate() - 1;
+
+            //day
+            var resultDay = document.getElementById('day_result');
+            resultDay.innerHTML = days;
+            //months
+            var resultMonth = document.getElementById('month_result');
+            resultMonth.innerHTML = months;
+            //year
+            var resultYear = document.getElementById('year_result');
+            resultYear.innerHTML = years;
+
+           
+            resultDay.classList.add("resultado-left");
+            resultMonth.classList.add("resultado-left");
+            resultYear.classList.add("resultado-left");
+            
+        }
+    </script>
+</body>
+</html>
